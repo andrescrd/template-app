@@ -1,48 +1,33 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import * as Yup from 'yup';
+import { Box, Button, Checkbox, Container, FormHelperText, Link, TextField, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormHelperText,
-  Link,
-  TextField,
-  Typography
-} from '@material-ui/core';
+import { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { useUserRegisterMutation } from '../../generated/graphql';
 import TitleHemlet from '../common/TitleHemlet';
-// import { useRegisterMutation } from '../../generated/graphql';
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  // const [registerMutation] = useRegisterMutation();
+  const [userRegisterMutation] = useUserRegisterMutation();
 
   const handleSubmit = async (value: { userName: string; password: string; }) => {
-    // try {
-    //   const errors = await registerMutation(
-    //     {
-    //       variables: {
-    //         data: {
-    //           userName: value.userName,
-    //           password: value.password
-    //         }
-    //       }
-    //     }
-    //   );
-
-    //   if (errors) {
-    //     //TODO: show error
-    //     alert("Error");
-    //   }
-    //   else{
-    //     navigate('/app/login', { replace: true });
-    //   }
-    // } catch {
-    //   //TODO: show error
-    //   alert("Error");
-    // }
+    setIsLoading(true)
+    await userRegisterMutation(
+      {
+        variables: {
+          data: {
+            userName: value.userName,
+            password: value.password
+          }
+        }
+      }
+    ).then(data => {
+      setIsLoading(false);
+      navigate('/login', { replace: true });
+    }).catch(err => {
+      setIsLoading(false);
+    });
   };
 
   return (
@@ -50,7 +35,7 @@ const Register = () => {
       <TitleHemlet title="Register" />
       <Box
         sx={{
-          // backgroundColor: 'background.default',
+          backgroundColor: 'background.default',
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
@@ -178,7 +163,7 @@ const Register = () => {
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     fullWidth
                     size="large"
                     type="submit"
