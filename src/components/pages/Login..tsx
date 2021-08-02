@@ -1,7 +1,3 @@
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
 import {
   Box,
   Button,
@@ -11,44 +7,37 @@ import {
   TextField,
   Typography
 } from '@material-ui/core';
-// import { useLoginMutation } from '../../generated/graphql';
+import { Formik } from 'formik';
+import { useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import loginApi from '../../api/login.api';
+import TitleHemlet from '../common/TitleHemlet';
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
+
   const navigate = useNavigate();
-  // const [loginMutation] = useLoginMutation();
 
-  const handleSubmit = async (value: { userName: string, password: string}) => {
-    // try {
+  const handleSubmit = (value: { userName: string, password: string }) => {
+    setIsLoading(true);
 
-    //   const { errors, data } = await loginMutation({
-    //     variables: {
-    //       userName: value.userName,
-    //       password: value.password
-    //     }
-    //   });
-
-    //   if (errors) {
-    //     alert("error");
-    //   }      
-    //   else {
-    //     var token = data?.login.accessToken;
-    //     alert(token);
-    //     navigate('/app/dashboard', { replace: true });
-    //   }
-
-    // } catch {
-    //   alert("error");
-
-    // }
+    loginApi(value.userName, value.password).then(data => {
+      setData(data);
+      setIsLoading(false);
+      navigate('/app/dashboard', { replace: true });
+    }).catch(err => {
+      setIsLoading(false);
+    });
   };
+  
   return (
     <>
-      <Helmet>
-        <title>Login | Material Kit</title>
-      </Helmet>
+      <TitleHemlet title="Login" />
       <Box
         sx={{
-          // backgroundColor: 'background.default',
+          backgroundColor: 'background.default',
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
@@ -140,7 +129,7 @@ const Login = () => {
                 <Box sx={{ py: 2 }}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     fullWidth
                     size="large"
                     type="submit"

@@ -1,0 +1,7 @@
+mutation userRegister($data: UserInput!) {
+  userRegister(data: $data){
+   id
+    userName
+    createdAt
+  }
+}
