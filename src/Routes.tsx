@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import DashboardLayout from './components/DashboardLayout';
-import MainLayout from './components/MainLayout';
+import DashboardLayout from './components/layout/DashboardLayout';
+import MainLayout from './components/layout/MainLayout';
 import Account from './components/pages/Account';
 import CompanyList from './components/pages/CompanyList';
 import CustomerList from './components/pages/CustomerList.';
