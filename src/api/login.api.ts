@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const URL = 'http://localhost:9000/auth/login';
 
-const loginApi = async (userName: string, password: string) => {
-
+const loginApi = async (userName: string, password: string): Promise<{ accessToken: string }> => {
     try {
         const response = await fetch(URL, {
             method: 'POST',
@@ -17,6 +16,7 @@ const loginApi = async (userName: string, password: string) => {
         if (!response.ok) {
             throw new Error("invalid user or password");
         }
+
         const data = await response.json();
         return data;
 

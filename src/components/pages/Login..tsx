@@ -1,37 +1,34 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Link,
-  TextField,
-  Typography
-} from '@material-ui/core';
+import { Box, Button, Container, Grid, Link, TextField, Typography } from '@material-ui/core';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import loginApi from '../../api/login.api';
+import AuthContext from '../../store/auth.context';
 import TitleHemlet from '../common/TitleHemlet';
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(null);
-
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSubmit = (value: { userName: string, password: string }) => {
     setIsLoading(true);
 
     loginApi(value.userName, value.password).then(data => {
-      setData(data);
+      authContext.login(data.accessToken);
       setIsLoading(false);
       navigate('/app/dashboard', { replace: true });
     }).catch(err => {
       setIsLoading(false);
+
+      //TODO: add error
+      alert(err);
     });
   };
-  
+
   return (
     <>
       <TitleHemlet title="Login" />
@@ -61,7 +58,6 @@ const Login = () => {
               handleBlur,
               handleChange,
               handleSubmit,
-              isSubmitting,
               touched,
               values
             }) => (
@@ -92,13 +88,6 @@ const Login = () => {
                     pt: 3
                   }}
                 >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
                 </Box>
                 <TextField
                   error={Boolean(touched.userName && errors.userName)}

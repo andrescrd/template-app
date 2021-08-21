@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { experimentalStyled } from '@material-ui/core';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import { useContext } from 'react';
+import AuthContext from '../../store/auth.context';
 
 const DashboardLayoutRoot = experimentalStyled('div')(
   ({ theme }) => ({
@@ -43,7 +45,7 @@ const DashboardLayout = () => {
 
   return (
     <DashboardLayoutRoot>
-      <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)} />
+      <DashboardNavbar onMobileNavOpen={() => setMobileNavOpen(true)}/>
       <DashboardSidebar
         onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}

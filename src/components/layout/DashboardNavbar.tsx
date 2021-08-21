@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   AppBar,
@@ -14,9 +14,18 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import Logo from './Logo';
+import AuthContext from '../../store/auth.context';
 
-const DashboardNavbar: React.FC<any> = ({ onMobileNavOpen, ...rest }) => {
+const DashboardNavbar: React.FC<any> = ({ onMobileNavOpen, onLogout, ...rest }) => {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [notifications] = useState([]);
+
+  const logoutHandler = () => {
+    logout();
+    navigate('/login', { replace: true });
+  }
 
   return (
     <AppBar
@@ -38,7 +47,10 @@ const DashboardNavbar: React.FC<any> = ({ onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit">
+          <IconButton
+            color="inherit"
+            onClick={logoutHandler}
+          >
             <InputIcon />
           </IconButton>
         </Hidden>
