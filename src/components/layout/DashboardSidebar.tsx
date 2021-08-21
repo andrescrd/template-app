@@ -69,11 +69,11 @@ const items = [
   //   icon: UserPlusIcon,
   //   title: 'Register'
   // },
-  // {
-  //   href: '/404',
-  //   icon: AlertCircleIcon,
-  //   title: 'Error'
-  // }
+  {
+    href: '/404',
+    icon: AlertCircleIcon,
+    title: 'Error'
+  }
 ];
 
 const DashboardSidebar: React.FC<any> = ({ onMobileClose, openMobile }) => {
